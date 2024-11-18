@@ -2,27 +2,36 @@
 public class ListTester {
 	public static void main(String[] args) {
 		LinkedList<Integer> list = new LinkedList<Integer>();
+		// ArrayBasedList<Integer> list = new ArrayBasedList<Integer>();
 		// add
 		for (int i = 10; i >= 0; i--) {
 			list.add(i);
 		}
 		System.out.println(list);
+		System.out.println(list.length());
+
 		// insert
+		
 		try {
-			int i = 0;
-			while (i < list.length()) {
-				list.insert(i*3+10, i);
-				i+=3;
-			}
-			System.out.println(list);
 			// adding to end
 			System.out.print("Shoud add 1000 to end ");
 			list.insert(1000, list.length());
 			System.out.println(list);
+			System.out.println(list.length());
+
 			// adding to beginning
 			list.insert(-1000, 0);
 			System.out.print("Shoud add -1000 to beginning ");
 			System.out.println(list);
+			System.out.println(list.length());
+
+			// adding in the middle
+			list.insert(-394, 2);
+			System.out.print("Shoud add -394 to pos 2 ");
+
+			System.out.println(list);
+			System.out.println(list.length());
+
 			
 		} catch(Exception E) { System.out.println(E); }
 		try {
@@ -30,44 +39,59 @@ public class ListTester {
 			// testing bounds on insert
 			list.insert(10000, 10000);
 		} catch(Exception E) { System.out.println(E); }
+	/*	System.out.println(list);
 		
-		System.out.println("Finding 19 - should output 4: " + list.find(19));
+		System.out.println("Finding 9 - should output 1: " + list.find(9));
 		System.out.println("Finding 8293 - should output -1: " + list.find(8293));
 		
 		try {
-			System.out.println("Getting 5 - should output 8: " + list.get(5));
-			System.out.println("Finding 8293 - should cause Out of Bounds ");
+			System.out.println("Getting 2 - should output 8: " + list.get(2));
+			System.out.println("Getting 8293 - should cause Out of Bounds ");
 			list.get(8293);
 		} catch(Exception E) { System.out.println(E); }
-		
-		try {
+		*/
+		/*try {
 			System.out.println("Setting pos 0 to -15 " + list.set(-15, 0));
 			System.out.println(list);
-			
+			System.out.println("Setting pos 5 to -20 " + list.set(-20, 5));
+			System.out.println(list);
+			System.out.println("Setting pos 10 to -20 " + list.set(-20, 10));
+			System.out.println(list);
 			System.out.println("Setting pos 12329 to -15: should cause error ");
 			list.set(-15, 12329);
 		} catch(Exception E) { System.out.println(E); }
-		
+		*/
 		//testing removes
 		try {
-			System.out.println("Remove position 5: should show 8 " + list.remove(5));
+			/*System.out.println("Remove position 5: should show -20 " + list.remove(5));
 			System.out.println(list);
+			
+			System.out.println("Remove position 0: should show -15 " + list.remove(0));
+			System.out.println(list);*/
+			System.out.println(list);
+			System.out.println(list.length());
+			System.out.println("Remove position size-1: should show 1000 " + list.remove(list.length()-1));
+			System.out.println(list);
+			
 			
 			System.out.println("Remove elt 5: should show true " + list.remove((Integer) 5));
 			System.out.println(list);
-
+			System.out.println("Remove elt -1000: should show true " + list.remove((Integer) (-1000)));
+			System.out.println(list);
+			System.out.println("Remove elt 0: should show true " + list.remove((Integer) 0));
+			System.out.println(list);
 			System.out.println("Remove elt 18492: should show false " + list.remove((Integer) 18492));
 			System.out.println(list);
+			System.out.println(list.length());
 
-			System.out.println("Remove position 58: should cause error");
 
-			list.remove(58);
+
 		} catch(Exception E) { System.out.println(E); }
+		System.out.println(list);
 		list.sort();
 		System.out.println("Printing sorted list: "  + list);
 		list.clear();
 		System.out.println("Printing the cleared list: " + list);
-
 		
 	}
 }

@@ -1,120 +1,23 @@
 
 public class LinkedList<T> implements List<T>{
 	
-	private CNode<T> head;
+	private CNode<T> start;
 	private int size;
 	
 	public LinkedList() {
-		head = null;
+		start = null;
 		size = 0;
 	}
 	
-	public boolean set(Comparable<T> o, int pos) {
-		if (pos >= size) return false;
-		CNode<T> curr = head;
-		for (int i = 0; i< pos; i++) {
-			curr = curr.getNext();
-		}
-		curr.setElt(o);
-		return true;
-	}
-	
-	public Comparable<T> get(int pos) throws Exception{
-		if (pos >= size) {
-			throw new IndexOutOfBoundsException();
-		}
-		CNode<T> curr = head;
-		for (int i = 0; i< pos; i++) {
-			curr = curr.getNext();
-		}
-		return curr.getElt();
-	}
-	public void add(Comparable<T> o) {
-		CNode<T> n = new CNode<T>(o);
-		if(head == null) {
-			head = n;
-		}
-		else {
-			CNode<T> curr = head;
-			for (int i = 0; i < size-1; i++) {
-				curr = curr.getNext();
-			}
-			curr.setNext(n);
-		}
-		size++;
-	}
-	public void insert(Comparable<T> o, int pos) throws Exception{
-		if (pos > size) {
-			throw new IndexOutOfBoundsException();
-		}
-		
-		CNode<T> n = new CNode<T>(o);
-		if (pos == 0) {
-			n.setNext(head);
-			head = n;
-		}
-		else {
-			CNode<T> curr = head;
-			for (int i = 0; i < pos-1; i++) {
-				curr = curr.getNext();
-			}
-			
-			n.setNext(curr.getNext());
-			curr.setNext(n);
-		}
-		size++;
-	}
-	public Comparable<T> remove(int pos) throws Exception{ 
-		if (pos >= size) {
-			throw new IndexOutOfBoundsException();
-		}
-		if (pos == 0) {
-			Comparable<T> toReturn = head.getElt();
-			head = head.getNext();
-			size--;
-			return toReturn;
-		}
-		
-		CNode<T> curr = head;
-		for (int i = 0; i < pos-1; i++) {
-			curr = curr.getNext();
-		}
-		Comparable<T> thing = curr.getNext().getElt();
-		curr.setNext(curr.getNext().getNext());
-		size--;
-		return thing;
-	}
-	
-	public boolean remove(Comparable<T> o) { 
-		/* int pos = this.find(o);
-		 * if (pos == -1) return false;
-		 * this.remove(pos);
-		 * return true;
-		 */
-		CNode<T> curr = head;
-		int i = 0;
-		if (o.equals(head.getElt())) {
-			head = head.getNext();
-			return true;
-		}
-		while (i < size-1 && !curr.getNext().getElt().equals(o)) {
-			curr = curr.getNext();
-			i++;
-		}
-		if (i == size-1) return false;
-		curr.setNext(curr.getNext().getNext());
-		size--;
-		return true;
-	}
-	
 	public int find(Comparable<T> o) {
-		CNode<T> curr = head;
-		for (int i = 0; i< size; i++) {
-			if (curr.getElt().equals(o)) {
-				return i;
+		int count = 0;
+		CNode<T> curr = start;			
+		while(curr != null) {
+			if(curr.getElt().equals(o)) {
+				return count;
 			}
 			curr = curr.getNext();
-			
+			count++;
 		}
 		return -1;
 	}
@@ -123,43 +26,131 @@ public class LinkedList<T> implements List<T>{
 		return size;
 	}
 	public String toString() {
-		String s = "";
-		CNode<T> curr = head;
-		for (int i = 0; i< size; i++) {
-			s += curr.toString() + " ";
+		String camron = "{ ";
+		CNode<T> curr = start;
+		// empty list
+		if (curr == null) return "{}";
+		while (curr.getNext() != null) {
+			camron += curr.getElt() + ", ";
 			curr = curr.getNext();
 		}
-		return s;
+		camron += curr.getElt() + " }";
+		return camron;
 	}
 	
+	public boolean set(Comparable<T> o, int pos) throws Exception{
+		if(pos < 0 || pos > size - 1) { throw new IndexOutOfBoundsException();}
+		CNode<T> curr = start;
+		for(int i = 0; i < pos; i++) {
+			curr = curr.getNext();
+		}
+		curr.setElt(o);
+		return true;
+	}
+	
+	public Comparable<T> get(int pos) throws Exception{
+		if (pos < 0 || pos >= size) { throw new IndexOutOfBoundsException(); }
+		CNode<T> curr = start;
+		for (int i = 0; i < pos; i++) {
+			curr = curr.getNext();
+		}
+		return curr.getElt();
+	}
+	
+	public void add(Comparable<T> o) {
+		CNode<T> toAdd = new CNode<T>(o);
+		CNode<T> curr = start;	
+		if(start == null) {
+			start = toAdd;
+			size++;
+			return;
+		}
+		while (curr.getNext() != null) {
+			curr = curr.getNext();
+		}
+		curr.setNext(toAdd);
+		size++;
+	}
+	public void insert(Comparable<T> o, int pos) throws Exception{
+		if (pos < 0 || pos > size) { throw new IndexOutOfBoundsException(); }
+		if (pos == size) { this.add(o); return; }
+		
+		CNode<T> newNode = new CNode<T>(o);
+		if (pos == 0) {
+			newNode.setNext(start);
+			start = newNode;
+			size++;
+			return; 
+		}
+ 		CNode<T> curr = start;
+		for (int i = 0; i < pos - 1; i++) {
+			curr = curr.getNext();
+		}
+		newNode.setNext(curr.getNext());
+		curr.setNext(newNode);
+		size++;
+	}
+	public Comparable<T> remove(int pos) throws Exception{ 
+		if (pos < 0 || pos >= size) { throw new IndexOutOfBoundsException(); }
+		CNode<T> curr = start;
+		Comparable<T> toRet;
+		size--;
+		if (pos == 0) {
+			toRet = start.getElt();
+			start = start.getNext();
+			return toRet;
+		} 
+		for (int i = 0; i < pos - 1; i++) {
+			curr = curr.getNext();
+			System.out.println(curr + " " + i + " " + pos);
+		}
+		toRet = curr.getNext().getElt();
+		curr.setNext(curr.getNext().getNext());
+		return toRet;
+	}
+	
+	public boolean remove(Comparable<T> o) { 
+		if (this.find(o) == -1) {
+			return false;
+		}
+		if (start.getElt().equals(o)) {
+			start = start.getNext();
+			size--;
+			return true;
+		}
+		CNode<T> curr = start;
+		CNode<T> prev = start;
+		while (!(curr.getElt().equals(o))) {
+			prev = curr;
+			curr = curr.getNext();
+		}
+		prev.setNext(curr.getNext());
+		size--;
+		return true;
+	}
+	
+	
 	public void clear() {
-		head = null;
+		start = null;
 		size = 0;
 	}
 	
 	public void sort() {
-		
-	}
-	
-	public static void main(String[] args) {
-		LinkedList<Integer> ll = new LinkedList<Integer>();
-		for (int i = 2; i < 10; i++) {
-			ll.add(i);
+		int numSwaps = 0;
+		for (int i = 0; i < size; i++) {
+			CNode<T> curr = start;
+			for (int j = 0; j < size - 1; j++) {
+				if (curr.getNext().getElt().compareTo((T) curr.getElt()) < 0) {
+					Comparable<T> temp = curr.getElt();
+					curr.setElt(curr.getNext().getElt());
+					curr.getNext().setElt(temp);
+					numSwaps++;
+				}
+				curr = curr.getNext();
+			}
+			if (numSwaps == 0) return;
+			numSwaps = 0;
 		}
-		System.out.println(ll);
-		System.out.println(ll.find(7));
-		System.out.println(ll.set(11, 4));
-		System.out.println(ll.set(12, 15));
-		System.out.println(ll);
-		try {
-			ll.insert(45, 5); 
-			System.out.println(ll.remove(0));
-			System.out.println(ll.remove((Integer)7));
-
-		} catch(Exception E) { System.out.println(E); }
-		
-		System.out.println(ll);
 		
 	}
-
 }
