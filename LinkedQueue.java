@@ -1,7 +1,4 @@
-/* Data Structures & Algos
- * Linked Queue
- * Fall 2023
- */
+
 
 public class LinkedQueue<T> implements Queue<T> {
 	private Node<T> front;
@@ -13,31 +10,57 @@ public class LinkedQueue<T> implements Queue<T> {
 	}
 	
 	public void enqueue(T o) {
-		if(front == null) {
-			front = new Node<T>(o);
-			back = front;
-		}
-		else if (front == back) {
-			back = new Node<T>(o);
-			front.setNext(back);
+		Node<T> newNode = new Node<T>(o);
+		if (front == null) { front = newNode; back = newNode;}
+		else if (front == back) { 
+			back = newNode;
+			back.setNext(front);	
 		}
 		else {
-			Node<T> Jonny = new Node<T>(o);
-			back.setNext(Jonny);
-			back = Jonny;
+			newNode.setNext(back);
+			back = newNode;
 		}
 		
 	}
 	public T dequeue() {
-		if (front == null) return null;
-		T elt = front.getElt();
-		front = front.getNext();
-		return elt;
+		//empty
+		if (front == null) {
+			return null;
+		}
+		
+		//front = back
+		if (front == back) {
+			T temp = front.getElt();
+			front = null;
+			back = null;
+			return temp;
+		}
+		// front != back
+		T temp = front.getElt();
+		Node<T> current = back;
+		while (current.getNext().getNext() != null) {
+			current = current.getNext();
+		}
+		current.setNext(null);
+		front = current;
+		return temp;
 	}
 	
 	public T peek() {
 		if (front == null) return null;
 		return front.getElt();
+	}
+	
+	public static void main(String[] args) {
+		LinkedQueue<Integer> q = new LinkedQueue<Integer>();
+		for (int i = 10; i >= 0; i--) {
+			q.enqueue(i);
+			System.out.println(q.peek());
+		}
+		System.out.println(q.dequeue());
+		System.out.println(q.dequeue());
+		System.out.println(q.dequeue());
+
 	}
 
 }

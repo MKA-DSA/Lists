@@ -14,36 +14,51 @@ public class ArrayQueue<T> implements Queue<T> {
 		this.Q = (T[]) Array.newInstance(Object.class, 10);
 		size = 0;
 	}
-	
+	// front = position 0; back = position size - 1
 	public void enqueue(T o) {
-		if(Q.length > size) {
-			Q[size++] = o;
-			return;
+		// if array is full
+		if (Q.length == size) {
+			T[] newArray = (T[]) Array.newInstance(Object.class, size + 10);
+			for (int i = 0; i < size; i++) {
+				newArray[i] = Q[i];
+			}
+			Q = newArray;
 		}
-		int newCapacity = Q.length * 2;
-		T[] temp = (T[]) Array.newInstance(Object.class, newCapacity);
-		for(int i = 0; i < Q.length; i++) {
-			temp[i] = Q[i];
-		}
-		temp[size++] = o;
-		Q = temp;		
+		Q[size] = o;
+		size++;
+		// o!!
 	}
 	
 	public T dequeue() {
-		if(size == 0) {
+		if (size == 0) {
 			return null;
 		}
-		
 		T temp = Q[0];
-		for(int i = 1; i < size; i++) {
-			Q[i-1] = Q[i];
+		for (int i = 0; i < size - 1; i++) {
+			Q[i] = Q[i+1];
 		}
 		size--;
 		return temp;
 	}
 	
 	public T peek() {
-		return Q[0];
+		if (size == 0) {
+			return null;
+		}
+		return Q[0]; 
+	}
+	public static void main(String[] args) {
+		ArrayQueue<Integer> q = new ArrayQueue<Integer>();
+		for (int i = 10; i >= 0; i--) {
+			q.enqueue(i);
+		//	System.out.println(q.peek());
+		}
+		System.out.println(q.dequeue());
+		System.out.println(q.dequeue());
+		System.out.println(q.dequeue());
+		System.out.println(q.dequeue());
+		System.out.println(q.dequeue());
+
 	}
 
 }
